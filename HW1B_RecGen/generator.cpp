@@ -33,7 +33,7 @@ bool recognizer(string s)
 //   terminate the program with control-C 
 //   after about 20 strings have been displayed.
 int main()
-{ **
+{
     queue<string> language;
     queue<string> toBeAppended;
     string alphabet = "abc";
