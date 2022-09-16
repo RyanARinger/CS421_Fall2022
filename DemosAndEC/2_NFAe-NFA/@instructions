@@ -1,0 +1,19 @@
+
+2. Convert NFA-e to NFA (removes all epsilon moves)
+---------------------------------------------------
+
+Must use and complete nfaeRemoveEC.cpp 
+
+In the nfa-e.txt file, we must put the highest state number first.
+
+Then, on the subsequent lines, put Trs of the NFA-e:
+state char state state .... -1
+where e stands for epsilon 
+e.g. 1 e 2 3 -1 
+     means from state 1 on epsilon, goes to state 2 and 3 
+     -1 means end of the line
+
+Output is nfa.txt containing NFA moves.
+
+nfaRemove.out demonstrates how your program should work.
+

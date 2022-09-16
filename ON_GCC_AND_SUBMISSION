@@ -1,0 +1,40 @@
+Note that to use exit(1), you need to include <stdlib.h>
+
+TO COMPILE:
+g++ <list cpp files only>   
+Never never compile .h files.
+g++ -std=c++11 can be used to for a newer g++ version.
+
+TO RUN:
+./a.out
+
+TO RECORD TEST RESULTS:
+/cs/recordhw <put a brand new .txt file name here e.g. result.txt>
+
+compile here
+run here
+
+exit
+
+You can download the created script file to submit to Cougar Courses. 
+
+--------------------------------------
+For project executable submission, do the following one file at a time:
+Make sure the executable (.out) was created on Empress. Otherwise, I will
+not be able to run it.
+
+/cs/submitIt_LK  G#   filename
+
+e.g.
+/cs/submitIt_LK  G3   group3scanner.out
+/cs/submitIt_LK  G3   scannerWork.txt
+
+To get feedback on your project parts,
+
+/cs/checkIt_LK  G#   
+
+--------------------------------------------------
+
+
+
+

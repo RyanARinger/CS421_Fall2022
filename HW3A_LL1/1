@@ -1,0 +1,211 @@
+Script started on Wed 04 Nov 2020 01:07:43 PM PST
+]0;lkrell@empress:/cs/cs421LK/CS421Progs/HW3A_LL1[?1034h[lkrell@empress HW3A_LL1]$ ./ll1.out 
+S:       2 A 2       3 A 3 
+A:        2 2        3 3 
+B: 
+Enter a string made of 2's and/or 3's: 2332
+Stack
+S
+--------------
+current char is: 2
+adding rhs of a rule to the stack
+
+Stack
+2
+A
+2
+--------------
+current char is: 2
+matched!
+
+Stack
+A
+2
+--------------
+current char is: 3
+adding rhs of a rule to the stack
+
+Stack
+3
+3
+2
+--------------
+current char is: 3
+matched!
+
+Stack
+3
+2
+--------------
+current char is: 3
+matched!
+
+Stack
+2
+--------------
+current char is: 2
+matched!
+
+Stack
+[ empty ]
+--------------
+>>Accept!
+
+]0;lkrell@empress:/cs/cs421LK/CS421Progs/HW3A_LL1[lkrell@empress HW3A_LL1]$ ./ll1.out 
+S:       2 A 2       3 A 3 
+A:        2 2        3 3 
+B: 
+Enter a string made of 2's and/or 3's: 3223
+Stack
+S
+--------------
+current char is: 3
+adding rhs of a rule to the stack
+
+Stack
+3
+A
+3
+--------------
+current char is: 3
+matched!
+
+Stack
+A
+3
+--------------
+current char is: 2
+adding rhs of a rule to the stack
+
+Stack
+2
+2
+3
+--------------
+current char is: 2
+matched!
+
+Stack
+2
+3
+--------------
+current char is: 2
+matched!
+
+Stack
+3
+--------------
+current char is: 3
+matched!
+
+Stack
+[ empty ]
+--------------
+>>Accept!
+
+]0;lkrell@empress:/cs/cs421LK/CS421Progs/HW3A_LL1[lkrell@empress HW3A_LL1]$ ./ll1.out 
+S:       2 A 2       3 A 3 
+A:        2 2        3 3 
+B: 
+Enter a string made of 2's and/or 3's: 122
+Stack
+S
+--------------
+current char is: 1
+>>Error - no rule. Reject!
+]0;lkrell@empress:/cs/cs421LK/CS421Progs/HW3A_LL1[lkrell@empress HW3A_LL1]$ ./ll1.out 
+S:       2 A 2       3 A 3 
+A:        2 2        3 3 
+B: 
+Enter a string made of 2's and/or 3's: 223
+Stack
+S
+--------------
+current char is: 2
+adding rhs of a rule to the stack
+
+Stack
+2
+A
+2
+--------------
+current char is: 2
+matched!
+
+Stack
+A
+2
+--------------
+current char is: 2
+adding rhs of a rule to the stack
+
+Stack
+2
+2
+2
+--------------
+current char is: 2
+matched!
+
+Stack
+2
+2
+--------------
+current char is: 3
+>>Mismatch error. Reject!
+]0;lkrell@empress:/cs/cs421LK/CS421Progs/HW3A_LL1[lkrell@empress HW3A_LL1]$ ./ll1.ou[6Pex./ll1.out 
+S:       2 A 2       3 A 3 
+A:        2 2        3 3 
+B: 
+Enter a string made of 2's and/or 3's: 2222
+Stack
+S
+--------------
+current char is: 0
+adding rhs of a rule to the stack
+
+Stack
+0
+A
+0
+--------------
+current char is: 2
+matched!
+
+Stack
+A
+2
+--------------
+current char is: 2
+adding rhs of a rule to the stack
+
+Stack
+2
+2
+2
+--------------
+current char is: 2
+matched!
+
+Stack
+2
+2
+--------------
+current char is: 2
+matched!
+
+Stack
+2
+--------------
+current char is: 2
+matched!
+
+Stack
+[ empty ]
+--------------
+>>Accept!
+
+]0;lkrell@empress:/cs/cs421LK/CS421Progs/HW3A_LL1[lkrell@empress HW3A_LL1]$ exit
+exit
+
+Script done on Wed 04 Nov 2020 01:08:06 PM PST

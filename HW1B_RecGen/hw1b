@@ -1,0 +1,20 @@
+Script started on Sun 05 Jan 2020 09:28:13 AM PST
+]0;lkrell@empress:/cs/cs421LK/CS421Progs/HW1B_RecGen[?1034h[lkrell@empress HW1B_RecGen]$ ./a.out 
+Enter string to check, enter "end" to exit
+a
+YES IN L
+b
+YES IN L
+aabbaa
+YES IN L
+c
+NO NOT IN L
+ac
+NO NOT IN L
+db
+NO NOT IN L
+end
+]0;lkrell@empress:/cs/cs421LK/CS421Progs/HW1B_RecGen[lkrell@empress HW1B_RecGen]$ exit
+exit
+
+Script done on Sun 05 Jan 2020 09:28:35 AM PST

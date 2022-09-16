@@ -1,0 +1,13 @@
+
+3. Finally, convert NFA to DFA
+----------------------------------
+
+Must use and complete nfadfaEC.cpp
+
+In the nfa.txt file, we must put the highest state number first.
+Then on the subsequent lines, put the Trs of the NFA:
+state char state state .... -1
+
+The output goes to dfa.txt
+
+nfadfa.out demonstrates how your program should work.

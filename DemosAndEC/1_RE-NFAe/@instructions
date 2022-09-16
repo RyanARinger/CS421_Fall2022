@@ -1,0 +1,25 @@
+
+1. Converts RE to NFA-e interactively via a menu
+---------------------------------------------------
+
+Must use and complete the re-nfaeEC.cpp file.   
+
+In re.txt, we must type all the arrow labels we plan to use, one per line. 
+e.g.
+a
+b
+c
+Component machines are created for these.
+
+Then, step by step, machines are combined by the user.
+
+At the end, nfa-e.txt will be the output showing the combined machines.
+
+Limitation:  It does not allow you to do (a | a)   
+ 
+re-nfae.out demonstrates how your program should work.
+
+It would be nice if you could display the combined machines in a more
+readable format because my output is hard to read.
+
+ 
