@@ -8,7 +8,7 @@ using namespace std;
 //----------------------------------------------
 // CS421 HW1 
 // Write a generator in C++ for L = {x | x is any combination of a's and b's}.
-// Your name: **
+// Your name: Ryan Ringer
 //----------------------------------------------
 
 // Copy the recognizer function here from the other file.
@@ -34,11 +34,60 @@ bool recognizer(string s)
 //   after about 20 strings have been displayed.
 int main()
 { **
-  
-  while(true)
-    {
-        ** // generate a string
-	** // if the recognizer says true, display it 
-    }// end of while
+    queue<string> language;
+    queue<string> toBeAppended;
+    string alphabet = "abc";
+    string temp = "";
+    string nestedTemp = "";
+    int queueSize = alphabet.size();
+    int itCounter = 0;
+    string choice = "n";
 
-}// end of main
+    for (int i = 0; i < queueSize; i++) {
+        temp = alphabet[i];
+        if (recognizer(temp)) {
+            language.push(temp);
+            cout << temp << endl;
+        }
+    }
+    
+    if(language.size() > 0)
+        while (true) {
+            cout << "Continue with one more character? (y/n):";
+            cin >> choice;
+            if (choice != "y" && choice != "yes") {
+                return 1;
+            }
+            /*if (itCounter >= 20) {
+                cout << "Continue for 20 more, or until next character (whichever comes last)? (y/n):";
+                cin >> choice;
+                if (choice != "y" && choice != "yes") {
+                   return 1;
+                }
+            }*/
+            queueSize = language.size();
+            while (!language.empty()) {
+                temp = language.front();
+                language.pop();
+                for (int i = 0; i < alphabet.size(); i++) {
+                    nestedTemp = temp + alphabet[i];
+                    if (recognizer(nestedTemp)) {
+                        toBeAppended.push(nestedTemp);
+                        cout << nestedTemp << endl;
+                        itCounter++;
+                    }
+                    else {
+
+                    }
+                    
+                }
+            }
+            language = toBeAppended;
+            while (!toBeAppended.empty()) {
+                toBeAppended.pop();
+            }
+        }
+
+
+    return 0;
+}
