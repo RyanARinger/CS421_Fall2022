@@ -1,18 +1,20 @@
-Script started on Wed 02 Feb 2022 06:10:39 PM PST
-]0;lkrell@empress:/cs/cs421LK/CS421Progs/HW1B_RecGen[?1034h[lkrell@empress HW1B_RecGen]$ ./recognizer.out 
-Enter 'end' to stop the program.
-
-Enter your string: a
+Script started on Fri 16 Sep 2022 09:26:05 PM PDT
+]0;ringe008@empress:~/CS421Progs/HW1B_RecGen[?1034h[ringe008@empress HW1B_RecGen]$ g++ recognizer.cpp -o recognizer.cpp[[[[Kout
+]0;ringe008@empress:~/CS421Progs/HW1B_RecGen[ringe008@empress HW1B_RecGen]$ ./recognizer.out 
+ENTER A STRING: a
 YES IN L
-
-Enter your string: b
+ENTER A STRING: b
 YES IN L
-
-Enter your string: c
+ENTER A STRING: aabba
+YES IN L
+ENTER A STRING: c
 NO NOT IN L
-
-Enter your string: ^C
-]0;lkrell@empress:/cs/cs421LK/CS421Progs/HW1B_RecGen[lkrell@empress HW1B_RecGen]$ exit
+ENTER A STRING: ac
+NO NOT IN L
+ENTER A STRING: db
+NO NOT IN L
+ENTER A STRING: 1
+]0;ringe008@empress:~/CS421Progs/HW1B_RecGen[ringe008@empress HW1B_RecGen]$ exit
 exit
 
-Script done on Wed 02 Feb 2022 06:10:48 PM PST
+Script done on Fri 16 Sep 2022 09:26:42 PM PDT

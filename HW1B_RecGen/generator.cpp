@@ -1,14 +1,20 @@
+//this program was written in visual studio
+
+
 #include <iostream>
 #include <queue>
 #include <string>
 
 using namespace std;
 
+//same recognizer function from the recognizer.cpp program
 bool recognizer(string s) {
-    int size = s.size();
+    int size = s.size(); //save the size of the passed string parameter
 
+    //loop for the length of the string
     for (int i = 0; i < size; i++)
     {
+	
         if (s[i] != 'a' && s[i] != 'b') return false;
     }
     return true;

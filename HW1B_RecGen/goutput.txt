@@ -1,0 +1,49 @@
+Script started on Fri 16 Sep 2022 09:40:22 PM PDT
+]0;ringe008@empress:~/CS421Progs/HW1B_RecGen[?1034h[ringe008@empress HW1B_RecGen]$ g++ generator.cpp -o generator.cpp[[[[Kout
+]0;ringe008@empress:~/CS421Progs/HW1B_RecGen[ringe008@empress HW1B_RecGen]$ ./generator.out 
+a
+b
+aa
+ab
+ba
+bb
+aaa
+aab
+aba
+abb
+baa
+bab
+bba
+bbb
+aaaa
+aaab
+aaba
+aabb
+abaa
+abab
+Continue for 20 more, or until next character (whichever comes last)? (y/n):y
+abba
+abbb
+baaa
+baab
+baba
+babb
+bbaa
+bbab
+bbba
+bbbb
+aaaaa
+aaaab
+aaaba
+aaabb
+aabaa
+aabab
+aabba
+aabbb
+abaaa
+abaab
+Continue for 20 more, or until next character (whichever comes last)? (y/n):n
+]0;ringe008@empress:~/CS421Progs/HW1B_RecGen[ringe008@empress HW1B_RecGen]$ exit
+exit
+
+Script done on Fri 16 Sep 2022 09:40:46 PM PDT
