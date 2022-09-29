@@ -5,7 +5,7 @@ using namespace std;
 
 //--------------------------------------
 // CS421 File mat.cpp for HW2A Matrix Practice
-// Your name: **
+// Your name: Ryan Ringer
 //--------------------------------------
 
 // the following can be changed and the rest of the code should work
@@ -19,7 +19,9 @@ vector<char>  T[R][C];  // 3 rows and 4 columns table for now
 
 int convert(char x)
 { 
-  ** do a formula to convert m to 0, n to 1, o to 2 etc.
+  //** do a formula to convert m to 0, n to 1, o to 2 etc.
+	//cout << "char code: " << (int)x - (int)'m' << endl;	
+	return (int)x - (int)'m';
 } 
 
 int readTable()
@@ -35,7 +37,12 @@ int readTable()
        char c; // one char from the file
 
        // ** Fill v with chars from the file (there are VM chars)
+ 	for(int i = 0; i < VM; i++){
+		fin >> c;
+		v.push_back(c);
+	}
        // ** Put  v in T[row][col]
+        T[row][col] = v;
      }//end of while
 }
 
@@ -45,12 +52,23 @@ void showVector(vector<char> v)
     for (int i = 1; i <= VM; i++) cout << "- ";
   else
     // show the content of v separated by blanks (e.g. "m n o")
+	for(int i = 0; i < VM; i++) cout << v[i] << " ";
 }
 
 // Displays T as a table, separating entries with "|" 
 void displayTable()
 {
   // ** display T nicely labeled with row numbers (col numbers not needed)
+
+	for(int i = 0; i < R; i++){
+		cout << i+1 << " ";
+		for(int j = 0; j < C; j++){
+			showVector(T[i][j]);
+			cout << "|";
+		}
+		cout << endl;
+	}
+
   //    by calling showVector 
 }
 
