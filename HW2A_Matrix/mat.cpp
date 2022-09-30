@@ -21,7 +21,8 @@ int convert(char x)
 { 
   //** do a formula to convert m to 0, n to 1, o to 2 etc.
 	//cout << "char code: " << (int)x - (int)'m' << endl;	
-	return (int)x - (int)'m';
+	return (int)x - (int)'m'; //subtract the ASCII value for 'm' from which ever character we recieve
+	// this works cleaner than four if statements and is reasonably scalable to 'z' and even further
 } 
 
 int readTable()
@@ -37,12 +38,12 @@ int readTable()
        char c; // one char from the file
 
        // ** Fill v with chars from the file (there are VM chars)
- 	for(int i = 0; i < VM; i++){
-		fin >> c;
-		v.push_back(c);
+ 	for(int i = 0; i < VM; i++){ // iterate once for every character expected in a string
+		fin >> c; //read the character
+		v.push_back(c); //push it onto the end of the vector
 	}
        // ** Put  v in T[row][col]
-        T[row][col] = v;
+        T[row][col] = v; //after the entire string is read, store into the matrix
      }//end of while
 }
 
@@ -52,7 +53,7 @@ void showVector(vector<char> v)
     for (int i = 1; i <= VM; i++) cout << "- ";
   else
     // show the content of v separated by blanks (e.g. "m n o")
-	for(int i = 0; i < VM; i++) cout << v[i] << " ";
+	for(int i = 0; i < VM; i++) cout << v[i] << " "; // output each character in the string followed by a space.
 }
 
 // Displays T as a table, separating entries with "|" 
@@ -60,13 +61,13 @@ void displayTable()
 {
   // ** display T nicely labeled with row numbers (col numbers not needed)
 
-	for(int i = 0; i < R; i++){
-		cout << i+1 << " ";
-		for(int j = 0; j < C; j++){
-			showVector(T[i][j]);
-			cout << "|";
+	for(int i = 0; i < R; i++){ // for each row
+		cout << i+1 << " "; //number the rows
+		for(int j = 0; j < C; j++){ // for each column
+			showVector(T[i][j]); //call the vector function
+			cout << "|"; // put a bar between each string
 		}
-		cout << endl;
+		cout << endl; //make a new line
 	}
 
   //    by calling showVector 
