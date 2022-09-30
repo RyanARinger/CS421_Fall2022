@@ -1,10 +1,16 @@
-Script started on Mon 14 Sep 2020 01:05:33 PM PDT
-]0;lkrell@empress:/cs/cs421LK/CS421Progs/HW2A_Matrix[?1034h[lkrell@empress HW2A_Matrix]$ ./mat.out 
-Reading table from lines.txt ...
-0| m n o | p q r | - - - | - - - 
-1| - - - | - - - | s t u | v w x 
-2| - - - | - - - | - - - | - - - 
-]0;lkrell@empress:/cs/cs421LK/CS421Progs/HW2A_Matrix[lkrell@empress HW2A_Matrix]$ exit
+Script started on Fri 30 Sep 2022 11:54:21 AM PDT
+]0;ringe008@empress:~/CS421Progs/HW2A_Matrix[?1034h[ringe008@empress HW2A_Matrix]$ cat lines.txt 
+0 m   m n o 
+0 n   p q r 
+1 o   s t u 
+1 p   v w x 
+ 
+]0;ringe008@empress:~/CS421Progs/HW2A_Matrix[ringe008@empress HW2A_Matrix]$ ./mat.out 
+Reading table from lines.txt...
+1 m n o |p q r |- - - |- - - |
+2 - - - |- - - |s t u |v w x |
+3 - - - |- - - |- - - |- - - |
+]0;ringe008@empress:~/CS421Progs/HW2A_Matrix[ringe008@empress HW2A_Matrix]$ exit
 exit
 
-Script done on Mon 14 Sep 2020 01:05:37 PM PDT
+Script done on Fri 30 Sep 2022 11:54:35 AM PDT

@@ -2,6 +2,4 @@
 0 n   p q r 
 1 o   s t u 
 1 p   v w x 
-2 m   r y a
-2 o   b e n
  
