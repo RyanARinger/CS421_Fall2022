@@ -14,6 +14,7 @@ using namespace std;
 
 // ---------- DFAs follow -------------------------
 
+// Conditionals for the values of d and l
 //l = (s[charpos] == 'c' || s[charpos] == 'd')
 //d = (s[charpos] == '8' || s[charpos] == '9')
 //_ = (s[charpos] == '_')
@@ -63,34 +64,39 @@ bool mytoken(string s)
 // This FA is for RE: l(l|d|_)^*
 bool ident_token(string s)
 {
-    int state = 0;
-    int charpos = 0;
-    cout << "Trying ident_token machine..." << endl;
+    int state = 0; //initial state zero
+    int charpos = 0; //start at the beginning of the string
 
-    while (s[charpos] != '\0') {
-        cout << "current state: " << state << endl;
-        cout << "character: " << s[charpos] << endl;
+    cout << "Trying ident_token machine..." << endl; //debug
+
+    while (s[charpos] != '\0') { //while the string is not empty
+
+        cout << "current state: " << state << endl; //debug
+        cout << "character: " << s[charpos] << endl; //debug
         
-        if (state == 0 && (s[charpos] == 'c' || s[charpos] == 'd')) {
-            state = 1;
+        //if the state is 0 and the current char is a letter ("c" or "d")
+        if (state == 0 && (s[charpos] == 'c' || s[charpos] == 'd')) { 
+            state = 1; //move onto state 1
         }
-        else {
-            if (state == 1 && ((s[charpos] == 'c' || s[charpos] == 'd') || (s[charpos] == '8' || s[charpos] == '9') || s[charpos] == '_')) {
-                state = 1;
+        else { //check other states
+            // if the state is state 1, and the current char is a "c", "d", "8", "9", or and underscore
+            if (state == 1 && ((s[charpos] == 'c' || s[charpos] == 'd') || (s[charpos] == '8' || s[charpos] == '9') || s[charpos] == '_')) { 
+                state = 1; //stay in state 1
             }
-            else {
-                cout << "I am stuck in state " << state << endl;
-                return false;
+            else { //anything else
+
+                cout << "I am stuck in state " << state << endl; //debug
+                return false; //break out by returning false; reject the string
             }
         }
 
-        charpos++;
+        charpos++; //increment the counter
 
     }
 
     //final state == 1
-    if (state == 1) return true;
-    return false;
+    if (state == 1) return true; //if we ended up in state 1, then we're good; accept the string
+    return false; //otherwise not
 
 }//end of ident
 
@@ -103,41 +109,47 @@ bool ident_token(string s)
 // This FA is for RE: d^*.d^+
 bool real_token(string s)
 {
-    int state = 0;
-    int charpos = 0;
-    cout << "Trying real_token machine..." << endl;
+    int state = 0; //initial state 0
+    int charpos = 0; //start at the beginning of the string
 
-    while (s[charpos] != '\0') {
-        cout << "current state: " << state << endl;
-        cout << "character: " << s[charpos] << endl;
+    cout << "Trying real_token machine..." << endl; //debug
 
+    while (s[charpos] != '\0') { //while the string is not empty
+
+        cout << "current state: " << state << endl; //debug
+        cout << "character: " << s[charpos] << endl; //debug
+
+        //if we are in state zero with an accepted digit value
         if (state == 0 && (s[charpos] == '8' || s[charpos] == '9')) {
-            state = 0;
+            state = 0; //stay in state zero
         }
+        //or if we are in state zero with a decimal
         else if (state == 0 && s[charpos] == '.') {
-            state = 1;
+            state = 1; //move to state one
         }
-        else {
+        else { //check other states
+            //if we are in state one and we read a digit
             if (state == 1 && (s[charpos] == '8' || s[charpos] == '9')) {
-                state = 2;
+                state = 2; //move to state two
             }
-            else {
+            else { //check last available state
+                //if we are in state two and we read another digit
                 if (state == 2 && (s[charpos] == '8' || s[charpos] == '9')) {
-                    state = 2;
+                    state = 2; //loop into state 2
                 }
-                else {
-                    cout << "I am stuck in state " << state << endl;
-                    return false;
+                else { //anything else
+                    cout << "I am stuck in state " << state << endl; //debug
+                    return false; //break out by returning false; reject the string
                 }
             }
         }
 
-        charpos++;
+        charpos++; //increment the counter
     }
 
     //final state == 2
-    if (state == 2) return true;
-    return false;
+    if (state == 2) return true; //if we are in state two, then we are good to go; accept the string
+    return false; //else :(
 }//end of real
 
 
@@ -147,33 +159,36 @@ bool real_token(string s)
 // This FA is for RE: d^+
 bool integer_token(string s)
 {
-    int state = 0;
-    int charpos = 0;
-    cout << "Trying real_token machine..." << endl;
+    int state = 0; //intitial state zero
+    int charpos = 0; //start at the begninning of the string
+    cout << "Trying real_token machine..." << endl; // debug
 
-    while (s[charpos] != '\0') {
-        cout << "current state: " << state << endl;
-        cout << "character: " << s[charpos] << endl;
-
+    while (s[charpos] != '\0') { //while the string is not empty
+        cout << "current state: " << state << endl; // debug
+        cout << "character: " << s[charpos] << endl; // debug 
+        
+        //check state zero
+        //if we are in state zero  and we read a digit
         if (state == 0 && (s[charpos] == '8' || s[charpos] == '9')) {
-            state = 1;
+            state = 1; //move to state 1
         }
-        else {
+        else { //check other states
+            //if we are in state one and we read a digit
             if (state == 1 && (s[charpos] == '8' || s[charpos] == '9')) {
-                state = 1;
+                state = 1; //stay in state one
             }
-            else {
-                cout << "I am stuck in state " << state << endl;
-                return false;
+            else { // anything else
+                cout << "I am stuck in state " << state << endl;//debug
+                return false; //break out by returning false; reject the string
             }
         }
 
-        charpos++;
+        charpos++; //increment the counter
     }
 
     //final state == 1
-    if (state == 1) return true;
-    return false;
+    if (state == 1) return true; //if we ended up in state 1, then we're good; accept the string
+    return false; //else :(
 }// end of int
 
 
@@ -222,13 +237,13 @@ int scanner(tokentype& the_type, string& w)
 
   if (mytoken(w))
     { the_type = MYTOKEN; }
-  else if (ident_token(w)) {
+  else if (ident_token(w)) { //ident_token
       the_type = IDENT;
   }
-  else if (real_token(w)) {
+  else if (real_token(w)) {//real_token
       the_type = REAL;
   }
-  else if (integer_token(w)) {
+  else if (integer_token(w)) {//int_token
       the_type = INT;
   }
   else //none of the FAs returned TRUE
