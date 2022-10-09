@@ -2,6 +2,8 @@
 #include<fstream>
 #include<vector>
 #include<string>
+#include<sstream>
+
 using namespace std;
 
 //--------------------------------------
@@ -29,7 +31,6 @@ int TRS[10][4];
 
 int readTables()
 {
-
     ifstream fin("trs.txt", ios::in);
     ifstream fin2("dfas.txt", ios::in);
 
@@ -40,31 +41,35 @@ int readTables()
     int chr = 0; //current char
     //getline(fin2, temp,);
 
+    stringstream stream(""); //use a stringstream to convert the strings to an int
 
     //for the TRS
     while (fin2 >> temp) { //while we have strings to read still
-
+        stream << temp;
         switch (cnt) { //switch on the counter for fields. This determines what we just read
         case 0: //for the first field
             DFAs[dfaCount].name = temp; //store the name
             cnt++; //increment
             break;
         case 1: //for the second field
-            DFAs[dfaCount].startstate = stoi(temp); //convert the string to an int and store the value
+            stream >> DFAs[dfaCount].startstate; //convert the string to an int and store the value
             cnt++; //increment
             break;
         case 2: //for the third field
-            DFAs[dfaCount].finalstate = stoi(temp); //convert the string to an in and store the value
+            stream >> DFAs[dfaCount].finalstate; //convert the string to an in and store the value
             cnt = 0; //reset the counter
             dfaCount++; //next element in the array
             break;
         }
+        stream.clear();
+        stream.str("");
     }
 
     //For the DFAs
     while (fin >> temp) { //while we are reading in strings
         //cout << chr << "," << state << " " << temp << endl;
-        cnt = stoi(temp); //convert the string to an int
+        stream << temp;
+        stream >> cnt; //convert the string to an int
         TRS[state][chr] = cnt; //store the int
 
         chr++; //prepare to read the next value, in this case for the letter after the one we just read
@@ -72,6 +77,9 @@ int readTables()
             chr = 0; //reset the counter
             state++; //move to the next state
         }
+
+        stream.clear();
+        stream.str("");
     }
 
     return dfaCount; //return the number of dfas which we counted earlier
@@ -114,7 +122,7 @@ bool accept(info dfa, string word)
         //column is calculated by subtracting the ASCII value of lowercase 'a' from the char read in, this should give us a zero based index for accessing columns
         column = (int)word[charpos] - (int)'a'; 
         //debug output
-        cout << "state is: " << state << " column is " << (int)word[charpos] - (int)'a' << " and the next state will be " << TRS[state][column] << endl;
+        cout << "state is: " << state << " char is " << word[charpos] << " and the next state will be " << TRS[state][column] << endl;
         state = TRS[state][column]; //assign the new state to the state variable for later
         //cout << "Char is: " << word[charpos] << ", Moving to state : " << TRS[state][column] << endl;
 
