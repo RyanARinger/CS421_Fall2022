@@ -125,7 +125,7 @@ bool accept(info dfa, string word)
         cout << "state is: " << state << " char is " << word[charpos] << " and the next state will be " << TRS[state][column] << endl;
         state = TRS[state][column]; //assign the new state to the state variable for later
         //cout << "Char is: " << word[charpos] << ", Moving to state : " << TRS[state][column] << endl;
-
+        if (state < 0) return false; //bunk word token
         charpos++; //increment the counter
     }
 
