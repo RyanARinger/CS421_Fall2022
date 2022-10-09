@@ -5,7 +5,7 @@ using namespace std;
 
 //------------------------------------------------
 // CS421 File fa.cpp for HW2B DFA->Scanner Function
-// Your name: **
+// Your name: Ryan Ringer
 //------------------------------------------------
 
 // ** Change this to fit the HW2B specification - look for **
@@ -13,6 +13,11 @@ using namespace std;
 // ** Must complete the ** comments with RE
 
 // ---------- DFAs follow -------------------------
+
+//l = (s[charpos] == 'c' || s[charpos] == 'd')
+//d = (s[charpos] == '8' || s[charpos] == '9')
+//_ = (s[charpos] == '_')
+//. = (s[charpos] == '.')
 
 // MYTOKEN DFA done by professor as a sample
 // This FA is for c d^+
@@ -29,18 +34,18 @@ bool mytoken(string s)
       cout << "character: " << s[charpos] << endl;
  
       if (state == 0 && s[charpos] == 'c')
-      state = 1;
+          state = 1;
       else
-      if (state == 1 && s[charpos] == 'd')
-      state = 2;
-      else
-      if (state == 2 && s[charpos] == 'd')
-      state = 2;
-      else
-	{
-	  cout << "I am stuck in state " << state << endl;
-	  return(false);
-	}
+          if (state == 1 && s[charpos] == 'd')
+              state = 2;
+          else
+              if (state == 2 && s[charpos] == 'd')
+                  state = 2;
+              else
+              {
+                  cout << "I am stuck in state " << state << endl;
+                  return(false);
+              }
       charpos++;
     }//end of while
 
@@ -51,26 +56,124 @@ bool mytoken(string s)
 
 
 // IDENT DFA 
-// This FA is for RE: **
+// Trs(s0, l) = s1
+// Trs(s1, l) = s1
+// Trs(s1, d) = s1
+// Trs(s1, _) = s1
+// This FA is for RE: l(l|d|_)^*
 bool ident_token(string s)
 {
-  // ** complete this based on mytoken
+    int state = 0;
+    int charpos = 0;
+    cout << "Trying ident_token machine..." << endl;
+
+    while (s[charpos] != '\0') {
+        cout << "current state: " << state << endl;
+        cout << "character: " << s[charpos] << endl;
+        
+        if (state == 0 && (s[charpos] == 'c' || s[charpos] == 'd')) {
+            state = 1;
+        }
+        else {
+            if (state == 1 && ((s[charpos] == 'c' || s[charpos] == 'd') || (s[charpos] == '8' || s[charpos] == '9') || s[charpos] == '_')) {
+                state = 1;
+            }
+            else {
+                cout << "I am stuck in state " << state << endl;
+                return false;
+            }
+        }
+
+        charpos++;
+
+    }
+
+    //final state == 1
+    if (state == 1) return true;
+    return false;
+
 }//end of ident
 
 
 // REAL DFA 
-// This FA is for RE: **
+// Trs(s0, d) = s0
+// Trs(s0, .) = s1
+// Trs(s1, d) = s2
+// Trs(s2, d) = s2
+// This FA is for RE: d^*.d^+
 bool real_token(string s)
 {
-  // ** complete this based on mytoken
+    int state = 0;
+    int charpos = 0;
+    cout << "Trying real_token machine..." << endl;
+
+    while (s[charpos] != '\0') {
+        cout << "current state: " << state << endl;
+        cout << "character: " << s[charpos] << endl;
+
+        if (state == 0 && (s[charpos] == '8' || s[charpos] == '9')) {
+            state = 0;
+        }
+        else if (state == 0 && s[charpos] == '.') {
+            state = 1;
+        }
+        else {
+            if (state == 1 && (s[charpos] == '8' || s[charpos] == '9')) {
+                state = 2;
+            }
+            else {
+                if (state == 2 && (s[charpos] == '8' || s[charpos] == '9')) {
+                    state = 2;
+                }
+                else {
+                    cout << "I am stuck in state " << state << endl;
+                    return false;
+                }
+            }
+        }
+
+        charpos++;
+    }
+
+    //final state == 2
+    if (state == 2) return true;
+    return false;
 }//end of real
 
 
 //INT DFA 
-// This FA is for RE: **
+// Trs(s0, d) = s1
+// Trs(s1, d) = s1
+// This FA is for RE: d^+
 bool integer_token(string s)
 {
-  // ** complete this based on mytoken
+    int state = 0;
+    int charpos = 0;
+    cout << "Trying real_token machine..." << endl;
+
+    while (s[charpos] != '\0') {
+        cout << "current state: " << state << endl;
+        cout << "character: " << s[charpos] << endl;
+
+        if (state == 0 && (s[charpos] == '8' || s[charpos] == '9')) {
+            state = 1;
+        }
+        else {
+            if (state == 1 && (s[charpos] == '8' || s[charpos] == '9')) {
+                state = 1;
+            }
+            else {
+                cout << "I am stuck in state " << state << endl;
+                return false;
+            }
+        }
+
+        charpos++;
+    }
+
+    //final state == 1
+    if (state == 1) return true;
+    return false;
 }// end of int
 
 
