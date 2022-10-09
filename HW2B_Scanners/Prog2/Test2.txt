@@ -1,0 +1,91 @@
+Script started on Sat 08 Oct 2022 11:25:13 PM PDT
+]0;ringe008@empress:~/CS421Progs/HW2B_Scanners/Prog2[?1034h[ringe008@empress Prog2]$ g++ td.cpp -o rtd.out
+]0;ringe008@empress:~/CS421Progs/HW2B_Scanners/Prog2[ringe008@empress Prog2]$ ./rrtd.out 
+This is a table driven scanner. Needs trs.txt and dfas.txt.
+States are 0 to 9 and chars are a to d
+Name: token1 Start State: 0 Final State: 1
+Name: token2 Start State: 2 Final State: 3
+         a  b  c  d
+State 0: 0  1        
+State 1:             
+State 2:       2  3  
+State 3:             
+State 4:             
+State 5:             
+State 6:             
+State 7:             
+State 8:             
+State 9:             
+.....done reading tables....
+@@Enter a string: ab
+state is: 0 char is a and the next state will be 0
+state is: 0 char is b and the next state will be 1
+word is accepted as token1
+
+do control-C to quit
+
+@@Enter a string: abb
+state is: 0 char is a and the next state will be 0
+state is: 0 char is b and the next state will be 1
+state is: 1 char is b and the next state will be -1
+
+state is: 2 char is a and the next state will be -1
+
+LEXICAL ERROR: Invalid string passes no DFA token criteria
+
+do control-C to quit
+
+@@Enter a string: aaab
+state is: 0 char is a and the next state will be 0
+state is: 0 char is a and the next state will be 0
+state is: 0 char is a and the next state will be 0
+state is: 0 char is b and the next state will be 1
+word is accepted as token1
+
+do control-C to quit
+
+@@Enter a string: cd
+state is: 0 char is c and the next state will be -1
+
+state is: 2 char is c and the next state will be 2
+state is: 2 char is d and the next state will be 3
+word is accepted as token2
+
+do control-C to quit
+
+@@Enter a string: cdd
+state is: 0 char is c and the next state will be -1
+
+state is: 2 char is c and the next state will be 2
+state is: 2 char is d and the next state will be 3
+state is: 3 char is d and the next state will be -1
+
+LEXICAL ERROR: Invalid string passes no DFA token criteria
+
+do control-C to quit
+
+@@Enter a string: cccd
+state is: 0 char is c and the next state will be -1
+
+state is: 2 char is c and the next state will be 2
+state is: 2 char is c and the next state will be 2
+state is: 2 char is c and the next state will be 2
+state is: 2 char is d and the next state will be 3
+word is accepted as token2
+
+do control-C to quit
+
+@@Enter a string: exit
+state is: 0 char is e and the next state will be -1
+
+state is: 2 char is e and the next state will be -1
+
+LEXICAL ERROR: Invalid string passes no DFA token criteria
+
+do control-C to quit
+
+@@Enter a string: ^C
+]0;ringe008@empress:~/CS421Progs/HW2B_Scanners/Prog2[ringe008@empress Prog2]$ exit
+exit
+
+Script done on Sat 08 Oct 2022 11:25:55 PM PDT
