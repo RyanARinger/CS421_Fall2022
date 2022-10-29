@@ -6,46 +6,137 @@ using namespace std;
 /* Look for all **'s and complete them */
 
 //=====================================================
-// File scanner.cpp written by: Group Number: ** 
+// File scanner.cpp written by: Group Number: ** 5
 //=====================================================
 
 // --------- Two DFAs ---------------------------------
-
+//q0 = 0
+//q0q1 = 1
+//qt = 2
+//qy = 3
+//qsa = 4
+//qs = 5
+//qc = 6
+//q0qy = 7
 // WORD DFA 
-// Done by: **
-// RE:   **
+// Done by: ** Reinhold Kulick
+// RE:   ** 
 bool word (string s)
 {
 
   int state = 0;
   int charpos = 0;
-  /* replace the following todo the word dfa  **
   while (s[charpos] != '\0') 
     {
-      if (state == 0 && s[charpos] == 'a')
-      state = 1;
-      else
-      if (state == 1 && s[charpos] == 'b')
-      state = 2;
-      else
-      if (state == 2 && s[charpos] == 'b')
-      state = 2;
-      else
-	  return(false);
-      charpos++;
+      	if (state == 0 && s[charpos] == 't') // if we are in the start state and we read a t
+      		state = 2;// go to state 2 (qt)
+      	
+      	else if (state == 0 && ((s[charpos] == 'b') || (s[charpos] == 'g') ||(s[charpos] == 'm') ||(s[charpos] == 'p') ||(s[charpos] == 'r') ||(s[charpos] == 'n') ||(s[charpos] == 'h'))) // if we are in the start state and receive a consonant
+      		state = 3;// go to state 3 (qy)
+      	
+      	else if (state == 0 && ((s[charpos] == 'a') || (s[charpos] == 'e') ||(s[charpos] == 'i') ||(s[charpos] == 'o') ||(s[charpos] == 'u'))) // if we are in the start state and we read a vowel
+      		state = 1;// go to state 1 (q0q1)
+      	
+      	else if (state == 0 && s[charpos] == 's')// if we are in the start state and we read an s
+      		state = 5;// go to state 5(qs)
+      		
+      	else if (state == 0 && ((s[charpos] == 'd') ||(s[charpos] == 'w') ||(s[charpos] == 'z') ||(s[charpos] == 'j') ||(s[charpos] == 'y')))// if we are in state one and we read in a d w z j or y
+			state == 4; // go to state 4 (qsa)
+			  
+		else if (state == 0 && s[charpos] == 'c')// if we are in the start state and we read in a c
+			state = 6; // go to state 6 (qc)
+			
+		else if (state == 1 && ((s[charpos] == 'a') || (s[charpos] == 'e') ||(s[charpos] == 'i') ||(s[charpos] == 'o') ||(s[charpos] == 'u'))) // we are in state one and receive a vowel
+      		state = 1;// remain at state 1 (q0q1)
+      		
+      	else if (state == 1 &&((s[charpos] == 'd') ||(s[charpos] == 'w') ||(s[charpos] == 'z') ||(s[charpos] == 'j')))// if we are in state 1 and we read a d w z or j
+      		state = 4;// go to state 4(qsa)	
+      	
+      	else if (state == 1 && ((s[charpos] == 'b') ||(s[charpos] == 'g') ||(s[charpos] == 'm') ||(s[charpos] == 'p') ||(s[charpos] == 'r') ||(s[charpos] == 'h'))) // if we are in state one and we read in a b g m p r or h
+      		state = 3;// go to state 3 (qy)
+      		
+      	else if (state == 1 && s[charpos] == 'c')// if we are in state 1 and we read in a c
+		  	state = 6;// go to state 6(qc)	
+      		
+      	else if (state == 1 && s[charpos] == 's')// if we are in state 1 and we read in an s
+		  	state = 5;// go to state 5(qs)
+			  
+		else if (state == 1 && s[charpos] == 'n')// if we are in state 1 and we read in an n
+		  	state = 7;// go to state 7(q0qy)
+			  
+		else if (state == 1 && s[charpos] == 't')// if we are in state 1 and we read in a t
+		  	state = 2;// go to state 2(qt)
+		
+		else if (state == 2 && s[charpos] == 's')// if we are in state 2 and we read in an s
+		  	state = 4;// go to state 4(qsa)
+			  
+		else if (state == 2 && ((s[charpos] == 'a') || (s[charpos] == 'e') ||(s[charpos] == 'i') ||(s[charpos] == 'o') ||(s[charpos] == 'u'))) // we are in state 2 and receive a vowel
+      		state = 1;// go to state 1 (q0q1)
+      		
+      	else if (state == 3 && ((s[charpos] == 'a') || (s[charpos] == 'e') ||(s[charpos] == 'i') ||(s[charpos] == 'o') ||(s[charpos] == 'u'))) // we are in state 3 and receive a vowel
+      		state = 1;// go to state 1 (q0q1)
+      		
+      	else if (state == 3 && s[charpos] == 'y') //if we are in state 3 and receive a y
+      		state = 4;// go to state 4 (qsa)
+      		
+      	else if (state == 4 && ((s[charpos] == 'a') || (s[charpos] == 'e') ||(s[charpos] == 'i') ||(s[charpos] == 'o') ||(s[charpos] == 'u') || (s[charpos] == 'y'))) // we are in state 4 and receive a vowel or a y
+      		state = 1;// go to state 1 (q0q1)
+			  	
+		else if (state == 5 && ((s[charpos] == 'a') || (s[charpos] == 'e') ||(s[charpos] == 'i') ||(s[charpos] == 'o') ||(s[charpos] == 'u'))) // we are in state 5 and receive a vowel 
+			state = 1;// go to state 1 (q0q1)
+			
+		else if (state == 5 && s[charpos] == 'h') //if we are in state 5 and receive a h
+      		state = 4;// go to state 4 (qsa)
+      		
+      	else if (state == 6 && s[charpos] == 'h') //if we are in state 6 and receive a h
+      		state = 4;// go to state 4 (qsa)
+      		
+      	else if (state == 7 && ((s[charpos] == 'a') || (s[charpos] == 'e') ||(s[charpos] == 'i') ||(s[charpos] == 'o') ||(s[charpos] == 'u'))) // we are in state 7 and receive a vowel 
+			state = 1;// go to state 1 (q0q1)
+		
+		else if (state == 7 && ((s[charpos] == 'b') || (s[charpos] == 'g') ||(s[charpos] == 'm') ||(s[charpos] == 'p') ||(s[charpos] == 'r') ||(s[charpos] == 'n') ||(s[charpos] == 'h'))) // if we are in state 7 and receive a consonant
+      		state = 3;// go to state 3 (qy)
+      		
+      	else if (state == 7 && ((s[charpos] == 'd') ||(s[charpos] == 'w') ||(s[charpos] == 'z') ||(s[charpos] == 'j') ||(s[charpos] == 'y')))// if we are in state one and we read in a d w z j or y
+			state == 4; // go to state 4 (qsa)
+			
+		else if (state == 7 && s[charpos] == 's') //if we are in state 7 and receive an s
+      		state = 5;// go to state 5 (qs)
+      		
+      	else if (state == 7 && s[charpos] == 't') //if we are in state 6 and receive a h
+      		state = 2;// go to state 4 (qt)
+      		
+      	else if (state == 7 && s[charpos] == 'c') //if we are in state 6 and receive a h
+      		state = 6;// go to state 4 (qc)
+			
+      	else
+	  		return(false);
+      	charpos++;
     }//end of while
 
   // where did I end up????
   if (state == 2) return(true);  // end in a final state
    else return(false);
-  */
 }
 
 // PERIOD DFA 
-// Done by: **
+// Done by: ** Reinhold Kulick
 bool period (string s)
 {  // complete this **
-}
+	int state = 0;// state counter
+  	int charpos = 0;// char positon counter
+  	while (s[charpos] != '\0') // while there is a character in the string that is not the end string character
+  	{
+  		if (state == 0 && s[charpos] == '.') // if we are in the start state and we read a t
+      		state = 1;// go to state 2 (qt)
+      	else if(state ==1)// if we are in the final state and we read in a character 
+      		return false;// fail
+      	charpos++;// itterates char position so that we traverse the string
+	}// end of while
+	if(state ==1)// if we are in a final state
+		return true;// success
+	return false;// if we get here without being in a final state
+}// end of period
 
 // ------ Three  Tables -------------------------------------
 
