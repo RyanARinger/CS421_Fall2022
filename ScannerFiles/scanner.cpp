@@ -111,7 +111,6 @@ bool word(string s)
             state = 6;// go to state 4 (qc)
 
         else {
-            cout << "Error in loop" << endl;
             return false;
         }
         charpos++;
@@ -268,7 +267,7 @@ int main()
         if (theword == "eofm") break;  // stop now
 
         cout << "Type is:" << tokenName[thetype] << endl;
-        cout << "Word is:" << theword << endl;
+        cout << "Word is:" << theword << endl << endl;
     }
 
     cout << "End of file is encountered." << endl;
