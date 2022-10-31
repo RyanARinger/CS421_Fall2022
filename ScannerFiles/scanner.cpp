@@ -144,9 +144,9 @@ bool period(string s)
 
 // TABLES Done by: Ben Dominguez & Ryan Ringer
 
-const int ROWS = 19;
-const int COLS = 2;
-const int NUMTOKENS = 30;
+const int ROWS = 19;        //number of unique reserved words provided in the reservedwords.txt file
+const int COLS = 2;         //one column to store the reserved word, one to store the string representation of the token name associated with it
+const int NUMTOKENS = 30;   //lenght of the tokenName array
 
 // ** Update the tokentype to be WORD1, WORD2, PERIOD, ERROR, EOFM, etc.
 enum tokentype { ERROR, EOFM, PERIOD, VERB, VERBNEG, VERBPAST, VERBPASTNEG, IS, WAS, OBJECT, SUBJECT, DESTINATION, PRONOUN, CONNECTOR, WORD1, WORD2 };
@@ -154,6 +154,7 @@ enum tokentype { ERROR, EOFM, PERIOD, VERB, VERBNEG, VERBPAST, VERBPASTNEG, IS, 
 // ** For the display names of tokens - must be in the same order as the tokentype.
 string tokenName[NUMTOKENS] = { "ERROR", "EOFM", "PERIOD", "VERB", "VERBNEG", "VERBPAST", "VERBPASTNEG", "IS", "WAS", "OBJECT", "SUBJECT", "DESTINATION", "PRONOUN", "CONNECTOR", "WORD1", "WORD2" };
 
+//table made up of reservedWords and their tokenType in string form
 string reservedWords[ROWS][COLS] = {
     {"masu", "VERB"},
     {"masen", "VERBNNEG"},
