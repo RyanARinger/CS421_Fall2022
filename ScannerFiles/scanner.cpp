@@ -209,24 +209,25 @@ int scanner(tokentype& tt, string& w)
 
     4. Return the token type & string  (pass by reference)
     */
-
+    // if the token is not a word
     if (!word(w)) {
-        if (period(w)) {
+        //check if token is a period
+        if (period(w)) { //is token is a period set type PERIOD
             tt = PERIOD;
             return 0;
-        }
+        }//if token is not a word or a period, display lexical error message, set tokentype to ERROR
         else {
             cout << "LEXICAL ERROR: Invalid string passes no DFA token criteria" << endl;
             tt = ERROR;
             return 1;
         }
     }
-
+    //if token is a word, search reservedWords table for current token
     for (int i = 0; i < ROWS; i++) {
-        if (w == reservedWords[i][0]) {
-            for (int j = 0; j < NUMTOKENS; j++) {
-                if (reservedWords[i][1] == tokenName[j]) {
-                    tt = (tokentype)j;
+        if (w == reservedWords[i][0]) { //if token is found in reservedWords table
+            for (int j = 0; j < NUMTOKENS; j++) {//find associated token type in tokenName array
+                if (reservedWords[i][1] == tokenName[j]) {//if token type is found in the tokenName array
+                    tt = (tokentype)j; //use the index of the array element to find enumerable tokenType
                     return 0;
                 }
             }
