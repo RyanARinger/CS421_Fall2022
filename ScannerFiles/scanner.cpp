@@ -233,11 +233,11 @@ int scanner(tokentype& tt, string& w)
             }
         }
     }
-
-    if (w[w.size() - 1] == 'E' || w[w.size() - 1] == 'I') {
-        tt = WORD2;
+    // if word not found in reserved words list determine if WORD1 or WORD2
+    if (w[w.size() - 1] == 'E' || w[w.size() - 1] == 'I') {//check the last char in the string, if it is either 'I' or 'E'
+        tt = WORD2;         //token type is WORD2
     }
-    else {
+    else {                  //otherwise WORD1
         tt = WORD1;
     }
 
