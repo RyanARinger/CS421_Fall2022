@@ -187,7 +187,7 @@ string reservedWords[ROWS][COLS] = {
     {"masendeshita", "VERBPAST"},
     {"desu", "IS"},
     {"deshita", "WAS"},
-    {"o", "OBJEST"},
+    {"o", "OBJECT"},
     {"wa", "SUBJECT"},
     {"ni", "DESTINATION"},
     {"watashi", "PRONOUN"},
@@ -206,6 +206,17 @@ string reservedWords[ROWS][COLS] = {
 // ------------ Scanner and Driver ----------------------- 
 
 ifstream fin;  // global stream for reading from the input file
+ofstream fout;
+
+bool doTracer = true;
+bool errorCorrection = true;
+string message = "";
+
+void printMessage() {
+    if (doTracer) {
+        cout << message << endl;
+    }
+}
 
 // Scanner processes only one word each time it is called
 // Gives back the token type and the word itself
@@ -214,7 +225,8 @@ int scanner(tokentype& tt, string& w)
 {
     // ** Grab the next word from the file via fin
     fin >> w;
-    cout << "Scanner called using word: " << w << endl;
+    message = "Scanner called using word: " + w;
+    printMessage();
     // 1. If it is eofm, return right now.   
     if (w == "eofm") {
         tt = EOFM;
@@ -243,7 +255,6 @@ int scanner(tokentype& tt, string& w)
             return 0;
         }//if token is not a word or a period, display lexical error message, set tokentype to ERROR
         else {
-            cout << "LEXICAL ERROR: Invalid string passes no DFA token criteria" << endl;
             tt = ERROR;
             return 1;
         }
@@ -277,6 +288,7 @@ int scanner(tokentype& tt, string& w)
 tokentype saved_token;
 string saved_lexeme;
 bool token_available = false;
+string filename;
 
 // ----- Four Utility Functions and Globals -----------------------------------
 
@@ -284,21 +296,32 @@ bool token_available = false;
 //    to display syntax error messages as specified by me.  
 
 // Type of error: Match Error
-// Done by: Renhold Kulick 
+// Done by: Renhold Kulick (fstream by Ryan Ringer)
 void syntaxerror1(string savedlexeme, tokentype token_type) {
-
-    cout << "SYNTAX ERROR: expected " << token_type << " but got " << savedlexeme << endl;
+    string error = "MATCH SYNTAX ERROR: expected " + tokenName[token_type] + " but got " + savedlexeme + "\n";
+    cout << error;
+    fout << error;
     //exit(1); //this is a real thing apparantly
-
 }
 // Type of error: Parser Error
-// Done by: Reinhold Kulick 
+// Done by: Reinhold Kulick (fstream by Ryan Ringer)
 void syntaxerror2(string savedlexeme, string expected) {
-
-    cout << "SYNTAX ERROR : unexpected " << savedlexeme << " found in parser function " << expected << endl;
+    string error = "PARSER SYNTAX ERROR : unexpected \"" + savedlexeme + "\" found in parser function " + expected + "\n";
+    cout << error;
+    fout << error;
     //exit(1); //this is a real thing apparantly
 
 }
+
+// Type of error: Scanner lexical error
+// Done by: Ryan Ringer
+void scannerError(string lexeme) {
+    string error = "LEXICAL ERROR: Invalid string " + lexeme + " passes no DFA token criteria\n";
+    cout << error;
+    fout << error;
+    //exit(1);
+}
+
 
 // ** Need the updated match and next_token with 2 global vars
 // saved_token and saved_lexeme
@@ -312,28 +335,42 @@ tokentype next_token() {
         token_available = true;
 
         if (saved_token == ERROR) {
-            syntaxerror1(saved_lexeme, saved_token);
+            scannerError(saved_lexeme); //which error in this case?
         }
     }
     return saved_token;
 }
 
-
 // Purpose: Match an expected tokentype to a read in token type
 // Done by: Ryan Ringer
 bool match(tokentype expected) {
+    string answer;
     if (next_token() != expected) {
-        syntaxerror2(saved_lexeme, tokenName[expected]);
-        return false;
-        /*
-        here is where we could do extra credit
-        */
+        syntaxerror1(saved_lexeme, expected);
+        if (!errorCorrection) {
+            return false;
+        }
+        else {
+            cout << "(Skip or Replace?) S/R: ";
+            cin >> answer;
+            if (answer == "S" || answer == "s") { //skip
+                //cout << "Skipping \n" << saved_lexeme << "\n and testing next token" << endl;
+                scanner(saved_token, saved_lexeme);
+                return match(expected);
+            }
+            else if (answer == "R" || answer == "r") { //replace
+                //do nothing for error case and replace
+            }
+            else {
+                cout << "invalid input, killing correction" << endl;
+                //return false;
+                exit(1);
+            }
+        }
     }
-    else {
-        cout << "Matched " << tokenName[expected] << endl;
-        token_available = false;
-        return true;
-    }
+    cout << "Matched " << tokenName[expected] << endl;
+    token_available = false;
+    return true;
 }
 
 // ----- RDP functions - one per non-term -------------------
@@ -367,23 +404,48 @@ void be();
 void tense();
 
 
-
-string filename;
-
 //----------- Driver ---------------------------
 
 // The new test driver to start the parser
-// Done by:  **
+// Done by: Ryan Ringer
 int main()
 {
+    /*string answer;
+
+    cout << "Tracing? Y/N: ";
+    cin >> answer;
+    if (answer == "N" || answer == "n") {
+        doTracer = false;
+    }
+    else if (answer == "Y" || answer == "y") {
+        doTracer = true;
+    }
+    else {
+        cout << "invalid input, tracing is on" << endl;
+    }
+
+    cout << "Error completion assumption? Y/N: ";
+    cin >> answer;
+    if (answer == "N" || answer == "n") {
+        errorCorrection = false;
+    }
+    else if (answer == "Y" || answer == "y") {
+        errorCorrection = true;
+    }
+    else {
+        cout << "invalid input, error correction is off" << endl;
+    }*/
+
     cout << "Enter the input file name: ";
     cin >> filename;
     fin.open(filename.c_str());
+    fout.open("errors.txt");
 
-    //** calls the <story> to start parsing]
+    //** calls the <story> to start parsing
     story();
     //** closes the input file 
     fin.close();
+    fout.close();
 
 }// end
 //** require no other input files!
@@ -395,10 +457,11 @@ int main()
 // Grammar: <story> ::= <s> { <s> }
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void story() {
-    cout << "Processing <story>" << endl;
+    message = "Processing <story>";
+    printMessage();
     s();
     while (true) {
-        switch (next_token()) { // this is the same as a single if/else statement but looks cleaner
+        switch (next_token()) { // this is the same as a single if/else statement so we do not need to call syntaxError2() in the default
         case CONNECTOR:
         case WORD1:
         case PRONOUN:
@@ -415,7 +478,8 @@ void story() {
 // Grammar: <s> ::= [CONNECTOR] <noun> SUBJECT <afterSubject>
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void s() {
-    cout << "Processing <s>" << endl;
+    message = "Processing <s>";
+    printMessage();
     if (next_token() == CONNECTOR) {
         match(CONNECTOR);
     }
@@ -427,7 +491,8 @@ void s() {
 // Grammar: <afterSubject> ::= <verb> <tense> PERIOD | <noun> <afterNoun>
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void afterSubject() {
-    cout << "Processing <afterSubject>" << endl;
+    message = "Processing <afterSubject>";
+    printMessage();
     switch (next_token()) {
     case WORD2:
         verb();
@@ -442,7 +507,7 @@ void afterSubject() {
         break;
 
     default: //syntax error
-        syntaxerror2(saved_lexeme, tokenName[saved_token]);
+        syntaxerror2(saved_lexeme, "<afterSubject>");
         return;
     }
 }
@@ -450,7 +515,7 @@ void afterSubject() {
 // Grammar: <afterNoun> ::= <be> PERIOD  | DESTINATION <verb> <tense> PERIOD | OBJECT <afterObject>
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void afterNoun() {
-    cout << "Processing <afterNoun>" << endl;
+    message = "Processing <afterNoun>";
     switch (next_token()) {
     case IS:
     case WAS:
@@ -471,7 +536,7 @@ void afterNoun() {
         break;
 
     default: //syntax error
-        syntaxerror2(saved_lexeme, tokenName[saved_token]);
+        syntaxerror2(saved_lexeme, "<afterNoun>");
         return;
     }
 }
@@ -479,7 +544,8 @@ void afterNoun() {
 // Grammar: <afterObject> ::= [ <noun> DESTINATION ] <verb> <tense> PERIOD
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void afterObject() {
-    cout << "Processing <afterObject>" << endl;
+    message = "Processing <afterObject>";
+    printMessage();
     if (next_token() == WORD1 || next_token() == PRONOUN) {
         noun();
         match(DESTINATION);
@@ -492,7 +558,8 @@ void afterObject() {
 // Grammar: <noun> ::= WORD1 | PRONOUN
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void noun() {
-    cout << "Processing <noun>" << endl;
+    message = "Processing <noun>";
+    printMessage();
     switch (next_token()) {
     case WORD1:
         match(WORD1);
@@ -500,20 +567,25 @@ void noun() {
     case PRONOUN:
         match(PRONOUN);
         break;
+    default:
+        syntaxerror2(saved_lexeme, "<noun>");
+        break;
     }
 }
 
 // Grammar: <verb> ::= WORD2
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void verb() {
-    cout << "Processing <verb>" << endl;
+    message = "Processing <verb>";
+    printMessage();
     match(WORD2);
 }
 
 // Grammar: <be> ::=   IS | WAS
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void be() {
-    cout << "Processing <be>" << endl;
+    message = "Processing <be>";
+    printMessage();
     switch (next_token()) {
     case IS:
         match(IS);
@@ -521,13 +593,18 @@ void be() {
     case WAS:
         match(WAS);
         break;
+    default:
+        syntaxerror2(saved_lexeme, "<be>");
+        break;
+
     }
 }
 
 // Grammar: <tense> ::= VERBPAST  | VERBPASTNEG | VERB | VERBNEG
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void tense() {
-    cout << "Processing <tense>" << endl;
+    message = "Processing <tense>";
+    printMessage();
     switch (next_token()) {
     case VERBPAST:
         match(VERBPAST);
@@ -540,6 +617,9 @@ void tense() {
         break;
     case VERBNEG:
         match(VERBNEG);
+        break;
+    default:
+        syntaxerror2(saved_lexeme, "<tense>");
         break;
     }
 }
