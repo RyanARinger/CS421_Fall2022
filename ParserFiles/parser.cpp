@@ -1,6 +1,7 @@
 #include<iostream>
 #include<fstream>
 #include<string>
+#include<stdlib.h>
 using namespace std;
 
 /* INSTRUCTION:  Complete all ** parts.
@@ -209,7 +210,7 @@ ifstream fin;  // global stream for reading from the input file
 ofstream fout;
 
 bool doTracer = true;
-bool errorCorrection = true;
+bool errorCorrection = false;
 string message = "";
 
 void printMessage() {
@@ -301,6 +302,7 @@ void syntaxerror1(string savedlexeme, tokentype token_type) {
     string error = "MATCH SYNTAX ERROR: expected " + tokenName[token_type] + " but got " + savedlexeme + "\n";
     cout << error;
     fout << error;
+    if(!errorCorrection) exit(1);
     //exit(1); //this is a real thing apparantly
 }
 // Type of error: Parser Error
@@ -309,8 +311,7 @@ void syntaxerror2(string savedlexeme, string expected) {
     string error = "PARSER SYNTAX ERROR : unexpected \"" + savedlexeme + "\" found in parser function " + expected + "\n";
     cout << error;
     fout << error;
-    //exit(1); //this is a real thing apparantly
-
+    exit(1);
 }
 
 // Type of error: Scanner lexical error
@@ -363,8 +364,8 @@ bool match(tokentype expected) {
             }
             else {
                 cout << "invalid input, killing correction" << endl;
-                //return false;
-                exit(1);
+                return false;
+                //exit(1);
             }
         }
     }
