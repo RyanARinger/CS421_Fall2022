@@ -214,6 +214,7 @@ int scanner(tokentype& tt, string& w)
 {
     // ** Grab the next word from the file via fin
     fin >> w;
+    cout << "Scanner called using word: " << w << endl;
     // 1. If it is eofm, return right now.   
     if (w == "eofm") {
         tt = EOFM;
@@ -329,6 +330,7 @@ bool match(tokentype expected) {
         */
     }
     else {
+        cout << "Matched " << tokenName[expected] << endl;
         token_available = false;
         return true;
     }
@@ -352,15 +354,54 @@ bool match(tokentype expected) {
 9 <tense> ::= VERBPAST  | VERBPASTNEG | VERB | VERBNEG
 */
 
+
+//prototypes used to avoid reorderng functions. See code after main()
+void story();
+void s();
+void afterSubject();
+void afterNoun();
+void afterObject();
+void noun();
+void verb();
+void be();
+void tense();
+
+
+
+string filename;
+
+//----------- Driver ---------------------------
+
+// The new test driver to start the parser
+// Done by:  **
+int main()
+{
+    cout << "Enter the input file name: ";
+    cin >> filename;
+    fin.open(filename.c_str());
+
+    //** calls the <story> to start parsing]
+    story();
+    //** closes the input file 
+    fin.close();
+
+}// end
+//** require no other input files!
+//** syntax error EC requires producing errors.txt of error messages
+//** tracing On/Off EC requires sending a flag to trace message output functions
+
+
+
 // Grammar: <story> ::= <s> { <s> }
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void story() {
+    cout << "Processing <story>" << endl;
     s();
     while (true) {
         switch (next_token()) { // this is the same as a single if/else statement but looks cleaner
         case CONNECTOR:
         case WORD1:
-        case WORD2:
+        case PRONOUN:
             s();
             break;
 
@@ -374,6 +415,7 @@ void story() {
 // Grammar: <s> ::= [CONNECTOR] <noun> SUBJECT <afterSubject>
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void s() {
+    cout << "Processing <s>" << endl;
     if (next_token() == CONNECTOR) {
         match(CONNECTOR);
     }
@@ -385,6 +427,7 @@ void s() {
 // Grammar: <afterSubject> ::= <verb> <tense> PERIOD | <noun> <afterNoun>
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void afterSubject() {
+    cout << "Processing <afterSubject>" << endl;
     switch (next_token()) {
     case WORD2:
         verb();
@@ -407,6 +450,7 @@ void afterSubject() {
 // Grammar: <afterNoun> ::= <be> PERIOD  | DESTINATION <verb> <tense> PERIOD | OBJECT <afterObject>
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void afterNoun() {
+    cout << "Processing <afterNoun>" << endl;
     switch (next_token()) {
     case IS:
     case WAS:
@@ -435,6 +479,7 @@ void afterNoun() {
 // Grammar: <afterObject> ::= [ <noun> DESTINATION ] <verb> <tense> PERIOD
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void afterObject() {
+    cout << "Processing <afterObject>" << endl;
     if (next_token() == WORD1 || next_token() == PRONOUN) {
         noun();
         match(DESTINATION);
@@ -447,6 +492,7 @@ void afterObject() {
 // Grammar: <noun> ::= WORD1 | PRONOUN
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void noun() {
+    cout << "Processing <noun>" << endl;
     switch (next_token()) {
     case WORD1:
         match(WORD1);
@@ -460,12 +506,14 @@ void noun() {
 // Grammar: <verb> ::= WORD2
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void verb() {
+    cout << "Processing <verb>" << endl;
     match(WORD2);
 }
 
 // Grammar: <be> ::=   IS | WAS
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void be() {
+    cout << "Processing <be>" << endl;
     switch (next_token()) {
     case IS:
         match(IS);
@@ -479,6 +527,7 @@ void be() {
 // Grammar: <tense> ::= VERBPAST  | VERBPASTNEG | VERB | VERBNEG
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void tense() {
+    cout << "Processing <tense>" << endl;
     switch (next_token()) {
     case VERBPAST:
         match(VERBPAST);
@@ -494,25 +543,3 @@ void tense() {
         break;
     }
 }
-
-
-
-string filename;
-
-//----------- Driver ---------------------------
-
-// The new test driver to start the parser
-// Done by:  **
-int main()
-{
-    cout << "Enter the input file name: ";
-    cin >> filename;
-    fin.open(filename.c_str());
-
-    //** calls the <story> to start parsing
-    //** closes the input file 
-
-}// end
-//** require no other input files!
-//** syntax error EC requires producing errors.txt of error messages
-//** tracing On/Off EC requires sending a flag to trace message output functions
