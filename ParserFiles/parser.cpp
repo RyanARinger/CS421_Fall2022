@@ -209,13 +209,13 @@ string reservedWords[ROWS][COLS] = {
 ifstream fin;  // global stream for reading from the input file
 ofstream fout;
 
-bool doTracer = true;
-bool errorCorrection = false;
+bool doTracer = true; //trace parser?
+bool errorCorrection = false; //error completion?
 string message = "";
 
-void printMessage() {
-    if (doTracer) {
-        cout << message << endl;
+void printMessage() { //this function is called everytime something is output to the console
+    if (doTracer) { // if the user turned on tracing
+        cout << message << endl; //output the message
     }
 }
 
@@ -286,10 +286,10 @@ int scanner(tokentype& tt, string& w)
 // File parser.cpp written by Group Number: 5
 //=================================================
 
-tokentype saved_token;
-string saved_lexeme;
-bool token_available = false;
-string filename;
+tokentype saved_token; //global saved token
+string saved_lexeme; //global saved_lexeme for the last read in word
+bool token_available = false; // for nex_token()
+string filename; //for the file to be opened
 
 // ----- Four Utility Functions and Globals -----------------------------------
 
@@ -297,30 +297,30 @@ string filename;
 //    to display syntax error messages as specified by me.  
 
 // Type of error: Match Error
-// Done by: Renhold Kulick (fstream by Ryan Ringer)
-void syntaxerror1(string savedlexeme, tokentype token_type) {
-    string error = "MATCH SYNTAX ERROR: expected " + tokenName[token_type] + " but got " + savedlexeme + "\n";
-    cout << error;
-    fout << error;
-    if(!errorCorrection) exit(1);
+// Done by: Renhold Kulick (fstream extra credit by Ryan Ringer)
+void syntaxerror1(string savedlexeme, tokentype token_type) { //for matching syntax errors
+    string error = "MATCH SYNTAX ERROR: expected " + tokenName[token_type] + " but got " + savedlexeme + "\n"; //error message
+    cout << error; //write to console
+    fout << error; //write to errors.txt
+    if(!errorCorrection) exit(1); //kill the program if error correction is not on
     //exit(1); //this is a real thing apparantly
 }
 // Type of error: Parser Error
-// Done by: Reinhold Kulick (fstream by Ryan Ringer)
-void syntaxerror2(string savedlexeme, string expected) {
-    string error = "PARSER SYNTAX ERROR : unexpected \"" + savedlexeme + "\" found in parser function " + expected + "\n";
-    cout << error;
-    fout << error;
-    exit(1);
+// Done by: Reinhold Kulick (fstream extra credit by Ryan Ringer)
+void syntaxerror2(string savedlexeme, string expected) { //for parser syntax errors
+    string error = "PARSER SYNTAX ERROR : unexpected \"" + savedlexeme + "\" found in parser function " + expected + "\n"; //error message
+    cout << error; //write to console
+    fout << error; //write to errors.txt
+    exit(1); //kill the program if a parser error is encountered
 }
 
 // Type of error: Scanner lexical error
 // Done by: Ryan Ringer
-void scannerError(string lexeme) {
-    string error = "LEXICAL ERROR: Invalid string " + lexeme + " passes no DFA token criteria\n";
-    cout << error;
-    fout << error;
-    //exit(1);
+void scannerError(string lexeme) { // for lexical scanner errros
+    string error = "LEXICAL ERROR: Invalid string " + lexeme + " passes no DFA token criteria\n"; //error message
+    cout << error; //write the message to console
+    fout << error; //write the message to errors.txt
+    //exit(1); //no need to kill the program because the parser errors already dictate program termination
 }
 
 
@@ -329,49 +329,49 @@ void scannerError(string lexeme) {
 
 // Purpose: Grab the next token from the iput string
 // Done by: Ryan Ringer
-tokentype next_token() {
-    if (!token_available) {
-        scanner(saved_token, saved_lexeme);
+tokentype next_token() { //to get the next token
+    if (!token_available) { //if the next token has already been found once
+        scanner(saved_token, saved_lexeme); //call the scanner to check the next token
 
-        token_available = true;
+        token_available = true; // token has been found, no need to reprocess.
 
-        if (saved_token == ERROR) {
-            scannerError(saved_lexeme); //which error in this case?
+        if (saved_token == ERROR) { // if the token read in produced a lexical error
+            scannerError(saved_lexeme); //produce a lexical error message
         }
     }
-    return saved_token;
+    return saved_token; //return either the new token or the one already read in and saved
 }
 
 // Purpose: Match an expected tokentype to a read in token type
 // Done by: Ryan Ringer
-bool match(tokentype expected) {
-    string answer;
-    if (next_token() != expected) {
-        syntaxerror1(saved_lexeme, expected);
-        if (!errorCorrection) {
-            return false;
+bool match(tokentype expected) { // to match a specified token type with the read in type
+    string answer; // for user input if error completion is turned on
+    if (next_token() != expected) { // if the next token does not match the expected token
+        syntaxerror1(saved_lexeme, expected); //we have a syntax error
+        if (!errorCorrection) { // if the user did not turn on error correction
+            return false; //blow the doors
         }
-        else {
-            cout << "(Skip or Replace?) S/R: ";
-            cin >> answer;
+        else { //the user did turn on error correction
+            cout << "(Skip or Replace?) S/R: "; //prompt the user
+            cin >> answer; //get their answer
             if (answer == "S" || answer == "s") { //skip
                 //cout << "Skipping \n" << saved_lexeme << "\n and testing next token" << endl;
-                scanner(saved_token, saved_lexeme);
-                return match(expected);
+                scanner(saved_token, saved_lexeme); //progress the scanner to the next token manually
+                return match(expected); // recurse and return the result of the match function with the new token
             }
             else if (answer == "R" || answer == "r") { //replace
                 //do nothing for error case and replace
             }
             else {
-                cout << "invalid input, killing correction" << endl;
-                return false;
-                //exit(1);
+                cout << "invalid input, killing correction" << endl; //dummy
+                //return false; //kill the program
+                exit(1); //kill the program
             }
         }
     }
-    cout << "Matched " << tokenName[expected] << endl;
-    token_available = false;
-    return true;
+    cout << "Matched " << tokenName[expected] << endl; //inform the trace that the token was matched
+    token_available = false; //prepare the next_token function to eat the next token
+    return true; // success
 }
 
 // ----- RDP functions - one per non-term -------------------
@@ -394,15 +394,15 @@ bool match(tokentype expected) {
 
 
 //prototypes used to avoid reorderng functions. See code after main()
-void story();
-void s();
-void afterSubject();
-void afterNoun();
-void afterObject();
-void noun();
-void verb();
-void be();
-void tense();
+void story();           //<story>
+void s();               //<s>
+void afterSubject();    //<afterSubject>
+void afterNoun();       //<afterNoun>
+void afterObject();     //<afterObject>
+void noun();            //<noun>
+void verb();            //<verb>
+void be();              //<be>
+void tense();           //<tense>
 
 
 //----------- Driver ---------------------------
@@ -411,6 +411,8 @@ void tense();
 // Done by: Ryan Ringer
 int main()
 {
+
+    //this code may be uncommented to prompt the user for tracing and error completion
     /*string answer;
 
     cout << "Tracing? Y/N: ";
@@ -437,16 +439,16 @@ int main()
         cout << "invalid input, error correction is off" << endl;
     }*/
 
-    cout << "Enter the input file name: ";
+    cout << "Enter the input file name: "; 
     cin >> filename;
     fin.open(filename.c_str());
-    fout.open("errors.txt");
+    fout.open("errors.txt"); //open the errors.txt file
 
     //** calls the <story> to start parsing
-    story();
+    story(); //start parsing
     //** closes the input file 
-    fin.close();
-    fout.close();
+    fin.close();//close the sentence file
+    fout.close(); //close the errors file
 
 }// end
 //** require no other input files!
@@ -458,19 +460,19 @@ int main()
 // Grammar: <story> ::= <s> { <s> }
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void story() {
-    message = "Processing <story>";
-    printMessage();
-    s();
-    while (true) {
+    message = "Processing <story>"; //trace
+    printMessage(); //print the trace
+    s(); //move into <s>
+    while (true) { //account for { <s> }
         switch (next_token()) { // this is the same as a single if/else statement so we do not need to call syntaxError2() in the default
-        case CONNECTOR:
-        case WORD1:
-        case PRONOUN:
-            s();
+        case CONNECTOR: //if the next token satisfies the needed tokens for <s> to begin
+        case WORD1: //cascade
+        case PRONOUN: //cascade
+            s(); //call <s> again
             break;
 
-        default:
-            return;
+        default: //if nothing
+            return; //do nothing
         }
 
     }
@@ -479,36 +481,36 @@ void story() {
 // Grammar: <s> ::= [CONNECTOR] <noun> SUBJECT <afterSubject>
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void s() {
-    message = "Processing <s>";
-    printMessage();
-    if (next_token() == CONNECTOR) {
-        match(CONNECTOR);
+    message = "Processing <s>"; //trace
+    printMessage(); //print the trace
+    if (next_token() == CONNECTOR) { // CONNECTOR is optional
+        match(CONNECTOR); //match it
     }
-    noun();
-    match(SUBJECT);
-    afterSubject();
+    noun(); //move into <noun>
+    match(SUBJECT); //match SUBJECT
+    afterSubject(); //move into <afterSubject>
 }
 
 // Grammar: <afterSubject> ::= <verb> <tense> PERIOD | <noun> <afterNoun>
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void afterSubject() {
-    message = "Processing <afterSubject>";
-    printMessage();
-    switch (next_token()) {
-    case WORD2:
-        verb();
-        tense();
-        match(PERIOD);
-        break;
+    message = "Processing <afterSubject>"; //trace
+    printMessage(); //print the trace
+    switch (next_token()) { //Make a choice by looking ahead 1
+    case WORD2: // if we have a <verb>
+        verb(); //move into <verb>
+        tense(); //move into <tense>
+        match(PERIOD); //match PERIOD
+        break; //nothing else
 
-    case WORD1:
+    case WORD1: //if next token is a <noun>
     case PRONOUN: //cascade
-        noun();
-        afterNoun();
-        break;
+        noun(); //move into <noun>
+        afterNoun(); //move into <afterNoun>
+        break; //nothing else
 
     default: //syntax error
-        syntaxerror2(saved_lexeme, "<afterSubject>");
+        syntaxerror2(saved_lexeme, "<afterSubject>"); //trigger a parser error
         return;
     }
 }
@@ -516,28 +518,29 @@ void afterSubject() {
 // Grammar: <afterNoun> ::= <be> PERIOD  | DESTINATION <verb> <tense> PERIOD | OBJECT <afterObject>
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void afterNoun() {
-    message = "Processing <afterNoun>";
-    switch (next_token()) {
-    case IS:
-    case WAS:
-        be();
-        match(PERIOD);
+    message = "Processing <afterNoun>"; //trace
+    printMessage(); //print the trace
+    switch (next_token()) { //make a choice
+    case IS: //if the next token is one of the <be> possibilities
+    case WAS: //cascade
+        be(); //move into <be>
+        match(PERIOD); //match PERIOD
         break;
 
-    case DESTINATION:
-        match(DESTINATION);
-        verb();
-        tense();
-        match(PERIOD);
+    case DESTINATION: //check for DESTINATION
+        match(DESTINATION); //match DESTINATION
+        verb(); //move into <verb>
+        tense(); //move into <tense>
+        match(PERIOD); //match PERIOD
         break;
 
-    case OBJECT:
-        match(OBJECT);
-        afterObject();
+    case OBJECT: //Check for OBJECT
+        match(OBJECT); //match OBJECT
+        afterObject(); //move into <afterObject>
         break;
 
     default: //syntax error
-        syntaxerror2(saved_lexeme, "<afterNoun>");
+        syntaxerror2(saved_lexeme, "<afterNoun>"); //trigger a parser error
         return;
     }
 }
@@ -545,31 +548,31 @@ void afterNoun() {
 // Grammar: <afterObject> ::= [ <noun> DESTINATION ] <verb> <tense> PERIOD
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void afterObject() {
-    message = "Processing <afterObject>";
-    printMessage();
-    if (next_token() == WORD1 || next_token() == PRONOUN) {
-        noun();
-        match(DESTINATION);
+    message = "Processing <afterObject>"; //trace
+    printMessage(); //print the trace
+    if (next_token() == WORD1 || next_token() == PRONOUN) { //if the next token is a <noun>
+        noun(); //move into <noun>
+        match(DESTINATION); //match DESTINATION
     }
-    verb();
-    tense();
-    match(PERIOD);
+    verb(); //move into <verb>
+    tense(); //move into <tense
+    match(PERIOD); //match PERIOD
 }
 
 // Grammar: <noun> ::= WORD1 | PRONOUN
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void noun() {
-    message = "Processing <noun>";
-    printMessage();
-    switch (next_token()) {
-    case WORD1:
-        match(WORD1);
+    message = "Processing <noun>"; //trace
+    printMessage(); //print the trace
+    switch (next_token()) { //make a decision
+    case WORD1: //if type is WORD1
+        match(WORD1); //match WORD1
         break;
-    case PRONOUN:
-        match(PRONOUN);
+    case PRONOUN: //if type is WORD2
+        match(PRONOUN); //match WORD2
         break;
     default:
-        syntaxerror2(saved_lexeme, "<noun>");
+        syntaxerror2(saved_lexeme, "<noun>"); //trigger a parser error
         break;
     }
 }
@@ -577,25 +580,25 @@ void noun() {
 // Grammar: <verb> ::= WORD2
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void verb() {
-    message = "Processing <verb>";
-    printMessage();
-    match(WORD2);
+    message = "Processing <verb>"; //trace
+    printMessage(); //print the trace
+    match(WORD2); //match the only type for <verb>: WORD2
 }
 
 // Grammar: <be> ::=   IS | WAS
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void be() {
-    message = "Processing <be>";
-    printMessage();
-    switch (next_token()) {
-    case IS:
-        match(IS);
+    message = "Processing <be>"; //trace
+    printMessage(); //print the trace
+    switch (next_token()){ //make a decision
+    case IS: //if type is IS
+        match(IS); //match IS
         break;
-    case WAS:
-        match(WAS);
+    case WAS: //if type is WAS
+        match(WAS); //match WAS
         break;
     default:
-        syntaxerror2(saved_lexeme, "<be>");
+        syntaxerror2(saved_lexeme, "<be>"); //trigger a parser error
         break;
 
     }
@@ -604,23 +607,23 @@ void be() {
 // Grammar: <tense> ::= VERBPAST  | VERBPASTNEG | VERB | VERBNEG
 // Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void tense() {
-    message = "Processing <tense>";
-    printMessage();
-    switch (next_token()) {
-    case VERBPAST:
-        match(VERBPAST);
+    message = "Processing <tense>"; //trace
+    printMessage(); //print the trace
+    switch (next_token()) { //make a decision
+    case VERBPAST: //if type is VERBPAST
+        match(VERBPAST); //match VERBPAST
         break;
-    case VERBPASTNEG:
-        match(VERBPASTNEG);
+    case VERBPASTNEG: //if VERBPASTNEG
+        match(VERBPASTNEG); //match VERBPASTNEG
         break;
-    case VERB:
-        match(VERB);
+    case VERB: //if VERB
+        match(VERB); //match VERB
         break;
-    case VERBNEG:
-        match(VERBNEG);
+    case VERBNEG: //if type is VERBNEG
+        match(VERBNEG); //match VERBNEG
         break;
     default:
-        syntaxerror2(saved_lexeme, "<tense>");
+        syntaxerror2(saved_lexeme, "<tense>"); //trigger a parser error
         break;
     }
 }
