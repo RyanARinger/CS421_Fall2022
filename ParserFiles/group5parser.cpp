@@ -411,9 +411,10 @@ void tense();           //<tense>
 // Done by: Ryan Ringer
 int main()
 {
-
+    
+    cout << "Group #5:" << endl << "Ryan Ringer" << endl << "Reinhold Kulick" << endl << "Ben Dominguez" << endl << endl;
     //this code may be uncommented to prompt the user for tracing and error completion
-    /*string answer;
+    string answer;
 
     cout << "Tracing? Y/N: ";
     cin >> answer;
@@ -437,7 +438,7 @@ int main()
     }
     else {
         cout << "invalid input, error correction is off" << endl;
-    }*/
+    }
 
     cout << "Enter the input file name: "; 
     cin >> filename;
