@@ -545,8 +545,8 @@ int main()
     cout << "Enter the input file name: ";
     cin >> filename;
     fin.open(filename.c_str());
-    //fin.open("partCtest1");
     irOut.open("translated.txt");
+    fout.open("errors.txt");
 
     //** calls the <story> to start parsing
     story();
@@ -555,6 +555,8 @@ int main()
     fin.close();
     //** closes traslated.txt
     irOut.close();
+
+    fout.close();
 
 
     if (printFileWhenDone) {
