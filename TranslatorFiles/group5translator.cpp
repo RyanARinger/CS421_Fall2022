@@ -212,7 +212,7 @@ ifstream lexIn;
 ofstream irOut;
 
 
-bool doTracer = true; //trace parser?
+bool doTracer = false; //trace parser?
 bool errorCorrection = false; //error completion?
 bool printFileWhenDone = false; //print the translation to the console when done?
 string message = "";
@@ -434,7 +434,7 @@ void tense();           //<tense>
 // Do not change the format or content of lexicon.txt 
 //  Done by: Ryan Ringer 
 
-map<string, string> Lexicon;
+map<string, string> Lexicon; //STL map for storing the Lexicon
 
 // ** Additions to parser.cpp here:
 //    getEword() - using the current saved_lexeme, look up the English word
@@ -443,32 +443,32 @@ map<string, string> Lexicon;
 //  Done by: Ryan Ringer & Ben Dominguez
 
 string getEword() {
-    if (Lexicon.find(saved_lexeme) != Lexicon.end()) {
-        saved_E_word = Lexicon.at(saved_lexeme);
-        return saved_E_word;
+    if (Lexicon.find(saved_lexeme) != Lexicon.end()) { //if the saved_lexeme is in the lexicon
+        saved_E_word = Lexicon.at(saved_lexeme); //grab the translated word from the lexicon and save saced_E_word
+        return saved_E_word; //return it for posterity
     }
-    else {
-        saved_E_word = saved_lexeme;
-        return saved_E_word;
+    else { //if the saved_lexeme has no translation
+        saved_E_word = saved_lexeme; //just save the saved_lexeme as the Eword
+        return saved_E_word; //return it
     }
 }
 
 //    gen(line_type) - using the line type,
 //                     sends a line of an IR to translated.txt
 //                     (saved_E_word or saved_token is used)
-//  Done by: ** 
+//  Done by: Ryan Ringer, Ben Dominguez, Reinhold Kulick
 void gen(string line_type) {
-    string appension;
-    if (line_type == "TENSE") {
+    string appension; // suffix of the IR (for Eword, or tense)
+    if (line_type == "TENSE") { //if we're generating "TENSE"
 
-        appension += tokenName[saved_token];
+        appension += tokenName[saved_token]; //get the equivalent token from the table
     }
-    else {
-        appension = saved_E_word;
+    else { // all other words, 
+        appension = saved_E_word; //get the saved_E_word
     }
-    string ir = line_type + ": " + appension + "\n";
-    if (line_type == "TENSE") ir += "\n";
-    irOut << ir;
+    string ir = line_type + ": " + appension + "\n"; // form the IR
+    if (line_type == "TENSE") ir += "\n"; //add an additional return for each new sentence.
+    irOut << ir; //write the IR to the file
     //cout << ir;
 }
 
@@ -481,93 +481,98 @@ void gen(string line_type) {
 // ** Each non-terminal function should be calling
 //    getEword and/or gen now.
 
+void readLex() {
+    lexIn.open("lexicon.txt"); //open the lexicon
+    string jWord, eWord; //one value for the japanese word, and one for the english equivalent.
+    while (lexIn) { //while there is information to be read in
+        lexIn >> jWord; //read to the japanese word
+        lexIn >> eWord; //then read to the english word
 
+        Lexicon.insert({ jWord, eWord }); //insert the  2-tuple into the map.
+    }
+    lexIn.close(); //close the lexicon
+}
+
+void printTrans() {
+    if (printFileWhenDone) { //if selected
+        ifstream printTrans("translated.txt"); //reopen the file in ifstream
+        {
+            if (printTrans.is_open()) { //if file exists
+                cout << endl << endl << printTrans.rdbuf(); //print results
+            }
+        }
+        printTrans.close(); //close the file again.
+    }
+}
 // ---------------- Driver ---------------------------
 
 // The final test driver to start the translator
-// Done by:  **
+// Done by:  Ryan Ringer, Ben Dominguez, Reinhold Kulick
 int main()
 {
-
     //** opens the lexicon.txt file and reads it into Lexicon
-    lexIn.open("lexicon.txt");
-    string jWord, eWord;
-    while (lexIn) {
-        lexIn >> jWord;
-        lexIn >> eWord;
-
-        Lexicon.insert({ jWord, eWord });
-    }
-    lexIn.close();
+    readLex(); //read the lexicon
     //** closes lexicon.txt 
 
-    cout << "Group #5:" << endl << "Ryan Ringer" << endl << "Reinhold Kulick" << endl << "Ben Dominguez" << endl << endl;
+    cout << "Group #5:" << endl << "Ryan Ringer" << endl << "Reinhold Kulick" << endl << "Ben Dominguez" << endl << endl; //hello there
     //this code may be uncommented to prompt the user for tracing and error completion
-    string answer;
+    string answer;// for input
 
-    cout << "Tracing? Y/N: ";
+    cout << "Tracing? Y/N: "; //want tracing?
     cin >> answer;
-    if (answer == "N" || answer == "n") {
-        doTracer = false;
+    if (answer == "N" || answer == "n") { //if no
+        doTracer = false; //then no
     }
-    else if (answer == "Y" || answer == "y") {
-        doTracer = true;
+    else if (answer == "Y" || answer == "y") { //if yes
+        doTracer = true; //then yes
     }
-    else {
-        cout << "invalid input, tracing is on" << endl;
-    }
-
-    cout << "Error completion assumption? Y/N: ";
-    cin >> answer;
-    if (answer == "N" || answer == "n") {
-        errorCorrection = false;
-    }
-    else if (answer == "Y" || answer == "y") {
-        errorCorrection = true;
-    }
-    else {
-        cout << "invalid input, error correction is off" << endl;
+    else { //cat on keyboard
+        cout << "invalid input, tracing is off" << endl; //default to no
     }
 
-    cout << "Output Translated output when done? Y/N: ";
+    cout << endl << "Error completion assumption? Y/N: "; //want error fixing?
     cin >> answer;
-    if (answer == "N" || answer == "n") {
-        printFileWhenDone = false;
+    if (answer == "N" || answer == "n") {  //if no
+        errorCorrection = false; //then no
     }
-    else if (answer == "Y" || answer == "y") {
-        printFileWhenDone = true;
+    else if (answer == "Y" || answer == "y") { //if yes
+        errorCorrection = true; //then yes
     }
-    else {
-        cout << "invalid input, printer is off" << endl;
+    else { //hamster
+        cout << "invalid input, error correction is off" << endl; //default to no
+    }
+
+    cout << endl << "Output Translated output when done? \n(Will save to translated.txt regardless of this option) Y/N: "; //want the translated.txt printed to console?
+    cin >> answer;
+    if (answer == "N" || answer == "n") { //if no
+        printFileWhenDone = false; //then no
+    }
+    else if (answer == "Y" || answer == "y") { //if yes
+        printFileWhenDone = true; //then yes
+    }
+    else { //goldfish
+        cout << "invalid input, printer is off" << endl; //default to no
     }
     //** opens the output file translated.txt
 
-    cout << "Enter the input file name: ";
-    cin >> filename;
-    fin.open(filename.c_str());
-    irOut.open("translated.txt");
-    fout.open("errors.txt");
+    cout << endl << "Enter the input file name: "; //prompt for filename
+    cin >> filename; //read in the filename
+    fin.open(filename.c_str()); //open the input
+    irOut.open("translated.txt"); //open the translated output file
+    fout.open("errors.txt"); //open the errors file
 
     //** calls the <story> to start parsing
-    story();
+    story(); //start parsing
 
     //** closes the input file 
-    fin.close();
+    fin.close(); //close the inout
     //** closes traslated.txt
-    irOut.close();
+    irOut.close(); //close the translated input file
 
-    fout.close();
+    fout.close(); //close errors.txt
 
+    printTrans(); //for printing translation
 
-    if (printFileWhenDone) {
-        ifstream printTrans("translated.txt");
-        {
-            if (printTrans.is_open()) {
-                cout << endl << endl << printTrans.rdbuf();
-            }
-        }
-        printTrans.close();
-    }
 
 }// end
 //** require no other input files!
